@@ -93,7 +93,7 @@ def table_to_file(table, filepath, adddic=None):
 
 def main():
     #function you want to call
-    print 'hello'
+    #print 'hello'
     pass
 
 def _main():
