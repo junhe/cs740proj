@@ -29,13 +29,13 @@ def clean_value(d):
     except KeyError:
         pass
 
-line = "cookie=0x20000000000000, duration=147.156s, table=0, n_packets=146, n_bytes=14308, idle_timeout=5, idle_age=0, priority=1,ip,in_port=2,dl_src=02:a9:f3:97:09:a0,dl_dst=02:47:38:b8:cc:2a,nw_src=10.10.1.2,nw_dst=10.10.1.1 actions=output:1"
+# line = "cookie=0x20000000000000, duration=147.156s, table=0, n_packets=146, n_bytes=14308, idle_timeout=5, idle_age=0, priority=1,ip,in_port=2,dl_src=02:a9:f3:97:09:a0,dl_dst=02:47:38:b8:cc:2a,nw_src=10.10.1.2,nw_dst=10.10.1.1 actions=output:1"
 
-# f = open('./zihao.log', 'r')
-f = open('./openflowdump-sample.log', 'r')
-print text2table(f.readlines())
+# # f = open('./zihao.log', 'r')
+# f = open('./openflowdump-sample.log', 'r')
+# print text2table(f.readlines())
 
-exit(0)
+# exit(0)
 
 def text2table_old(linelist):
     num = Word(nums)
