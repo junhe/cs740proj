@@ -50,7 +50,7 @@ def ParameterCombinations(parameter_dict):
 
 #########################################################
 # Git helper
-# you can use to get hash of the code, which you can put 
+# you can use to get hash of the code, which you can put
 # to your results
 def git_latest_hash():
     cmd = ['git', 'log', '--pretty=format:"%h"', '-n', '1']
@@ -63,7 +63,7 @@ def git_latest_hash():
     return hash
 
 def git_commit(msg='auto commit'):
-    shcmd('git commit -am "{msg}"'.format(msg=msg), 
+    shcmd('git commit -am "{msg}"'.format(msg=msg),
             ignore_error=True)
 
 ########################################################
@@ -101,7 +101,7 @@ def _main():
             description="This file hold command stream." \
             'Example: python Makefile.py doexp1 '
             )
-    parser.add_argument('-t', '--target', action='store') 
+    parser.add_argument('-t', '--target', action='store')
     args = parser.parse_args()
 
     if args.target == None:
@@ -115,3 +115,7 @@ def _main():
 
 if __name__ == '__main__':
     _main()
+
+
+
+
