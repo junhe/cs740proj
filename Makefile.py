@@ -9,6 +9,7 @@ import sys
 import shlex
 import time
 import glob
+import flowTableParser
 from time import localtime, strftime
 
 def shcmd(cmd, ignore_error=False):
@@ -90,6 +91,26 @@ def table_to_file(table, filepath, adddic=None):
             rowstr = ';'.join(rowstr) + '\n'
             f.write(rowstr)
 
+
+def dump_table_to_list():
+    cmd = 'sudo ovs-ofctl dump-flows br0'.split()
+    proc = subprocess.Popen(cmd, stdout=open('/tmp/_flowtmp','w'))
+    proc.wait()
+
+    f = open('/tmp/_flowtmp','r')
+    return f.readlines()
+
+def append_table_to_file(fpath):
+    accum_table = []
+    for i in range(3):
+        linelist = dump_table()
+        tab = flowTableParser.text2table(linelist)
+        accum_table.extend(tab)
+
+        sleeptime = 2
+        print 'sleeping for ', sleeptime, 'seconds'
+        time.sleep(sleeptime)
+    table_to_file(accum_table, fpath)
 
 def main():
     #function you want to call
