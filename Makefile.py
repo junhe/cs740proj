@@ -103,7 +103,7 @@ def dump_table_to_list():
 def append_table_to_file(fpath):
     accum_table = []
     for i in range(3):
-        linelist = dump_table()
+        linelist = dump_table_to_list()
         tab = flowTableParser.text2table(linelist)
         accum_table.extend(tab)
 
@@ -115,7 +115,7 @@ def append_table_to_file(fpath):
 def main():
     #function you want to call
     #print 'hello'
-    pass
+    append_table_to_file('./mylog.txt')
 
 def _main():
     parser = argparse.ArgumentParser(
