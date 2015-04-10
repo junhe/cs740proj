@@ -3,22 +3,20 @@ import pprint
 import flowTableParser
 
 def dump_table():
-    cmd = 'echo 888888'.split()
+    cmd = 'sudo ovs-ofctl dump-flows br0'.split()
     proc = subprocess.Popen(cmd, stdout=open('/tmp/_flowtmp','w'))
     proc.wait()
 
-    for line in open('/tmp/_flowtmp','r'):
-        print line
-
+    f = open('/tmp/_flowtmp','r')
+    return f.readlines()
 
 def main():
-    # dump_table()
-    f = open('./openflowdump-sample.log', 'r')
-    text = f.readlines()
+    linelist = dump_table()
+    # f = open('./openflowdump-sample.log', 'r')
+    # linelist = f.readlines()
 
-    tab = flowTableParser.text2table(text)
+    tab = flowTableParser.text2table(linelist)
     pprint.pprint( tab )
-
 
 if __name__ == '__main__':
     main()
