@@ -1,5 +1,4 @@
 from pyparsing import *
-import pprint
 
 def text2table(linelist):
     num = Word(nums)
@@ -27,9 +26,9 @@ def text2table(linelist):
 
     return table
 
-f = open('./openflowdump-sample.log', 'r')
-text = f.readlines()
+# f = open('./openflowdump-sample.log', 'r')
+# text = f.readlines()
 
-tab = text2table(text)
-pprint.pprint( tab )
+# tab = text2table(text)
+# pprint.pprint( tab )
 
