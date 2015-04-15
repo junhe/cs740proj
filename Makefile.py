@@ -137,8 +137,11 @@ def append_raw_to_file(fpath):
             mode = 'w'
         else:
             mode = 'a'
+        curtime = strftime("%Y-%m-%d-%H-%M-%S", localtime())
+        linelist = [line.strip() + ' curtime=' + curtime 
+                    for line in linelist]
         f = open(fpath, mode)
-        f.write(''.join(linelist))
+        f.write('\n'.join(linelist))
         f.flush()
         os.fsync(f.fileno())
         f.close()
