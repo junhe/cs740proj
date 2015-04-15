@@ -73,14 +73,20 @@ def git_commit(msg='auto commit'):
 #           {'col1':data, 'col2':data, ..},
 #           ...
 #         ]
-def table_to_file(table, filepath, adddic=None):
+def table_to_file(table, filepath, freshfile, adddic=None):
     'save table to a file with additional columns'
-    with open(filepath, 'w') as f:
+    if freshfile:
+        mode = 'w'
+    else:
+        mode = 'a'
+
+    with open(filepath, mode) as f:
         colnames = table[0].keys()
         if adddic != None:
             colnames += adddic.keys()
         colnamestr = ';'.join(colnames) + '\n'
-        f.write(colnamestr)
+        if freshfile:
+            f.write(colnamestr)
         for row in table:
             if adddic != None:
                 rowcopy = dict(row.items() + adddic.items())
@@ -90,6 +96,8 @@ def table_to_file(table, filepath, adddic=None):
             rowstr = [str(x) for x in rowstr]
             rowstr = ';'.join(rowstr) + '\n'
             f.write(rowstr)
+            f.flush()
+            os.fsync(f.fileno())
 
 
 def dump_table_to_list():
@@ -101,16 +109,16 @@ def dump_table_to_list():
     return f.readlines()
 
 def append_table_to_file(fpath):
-    accum_table = []
+    fresh = True
     for i in range(3):
         linelist = dump_table_to_list()
         tab = flowTableParser.text2table(linelist)
-        accum_table.extend(tab)
+        table_to_file(tab, fpath, fresh)
+        fresh = False
 
         sleeptime = 2
         print 'sleeping for ', sleeptime, 'seconds'
         time.sleep(sleeptime)
-    table_to_file(accum_table, fpath)
 
 def main():
     #function you want to call
