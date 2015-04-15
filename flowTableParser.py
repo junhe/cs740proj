@@ -15,7 +15,7 @@ def parse_line(line):
 def text2table(linelist):
     table = []
     for line in linelist:
-        if not line.startswith(' cookie='):
+        if not line.strip().startswith('cookie='):
             continue
         d = parse_line(line)
         clean_value(d)
