@@ -82,7 +82,7 @@ def table_to_file(table, filepath, freshfile, adddic=None):
     else:
         mode = 'a'
 
-    colnames = get_all_colnames()
+    colnames = get_all_colnames(table)
 
     with open(filepath, mode) as f:
         if adddic != None:
@@ -165,11 +165,10 @@ def debug2():
 
 def debug():
     fresh = True
-    with open('./zihao2.txt', 'r') as f:
+    with open('./benchmark_read_128_files_1KB.txt', 'r') as f:
         linelist = f.readlines()
         tab = flowTableParser.text2table(linelist)
         table_to_file(tab, 'tmp.txt', fresh)
-        print tab
 
 def main():
     #function you want to call
