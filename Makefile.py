@@ -163,12 +163,17 @@ def debug2():
         f.close()
         fresh = False
 
-def debug():
-    fresh = True
-    with open('./benchmark_read_128_files_1KB.txt', 'r') as f:
+def parse_raw_files():
+    filelist = ['./benchmark_read_128_files_1KB.txt']
+    for fpath in filelist:
+        parse_single_file(fpath)
+
+def parse_single_file(fpath):
+    with open(fpath, 'r') as f:
         linelist = f.readlines()
         tab = flowTableParser.text2table(linelist)
-        table_to_file(tab, 'tmp.txt', fresh)
+        tab = [row for row in tab if row['n_packets'] != '0']
+        table_to_file(tab, fpath+'.parsed', freshfile=True)
 
 def main():
     #function you want to call
