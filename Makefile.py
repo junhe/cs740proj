@@ -122,11 +122,54 @@ def append_table_to_file(fpath):
         print 'sleeping for ', sleeptime, 'seconds'
         time.sleep(sleeptime)
 
+def append_raw_to_file(fpath):
+    fresh = True
+    while True:
+        linelist = dump_table_to_list()
+        if fresh:
+            mode = 'w'
+        else:
+            mode = 'a'
+        f = open(fpath, mode)
+        f.write(''.join(linelist))
+        f.flush()
+        os.fsync(f.fileno())
+        f.close()
+        fresh = False
+
+        sleeptime = 5
+        print 'sleeping for ', sleeptime, 'seconds'
+        time.sleep(sleeptime)
+
+def debug2():
+    fresh = True
+    with open('./zihao2.txt', 'r') as f:
+        linelist = f.readlines()
+        if fresh:
+            mode = 'w'
+        else:
+            mode = 'a'
+        f = open('tmp.txt', mode)
+        f.write(''.join(linelist))
+        f.flush()
+        os.fsync(f.fileno())
+        f.close()
+        fresh = False
+
+def debug():
+    fresh = True
+    with open('./zihao2.txt', 'r') as f:
+        linelist = f.readlines()
+        tab = flowTableParser.text2table(linelist)
+        table_to_file(tab, 'tmp.txt', fresh)
+        print tab
+
 def main():
     #function you want to call
     #print 'hello'
     # append_table_to_file('./mylog.txt')
-    append_table_to_file(args.log)
+    # append_table_to_file(args.log)
+    append_raw_to_file(args.log)
 
 def _main():
     global args
