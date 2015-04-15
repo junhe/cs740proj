@@ -131,6 +131,7 @@ def append_table_to_file(fpath):
 
 def append_raw_to_file(fpath):
     fresh = True
+    batchid = 0
     while True:
         linelist = dump_table_to_list()
         if fresh:
@@ -138,8 +139,9 @@ def append_raw_to_file(fpath):
         else:
             mode = 'a'
         curtime = strftime("%Y-%m-%d-%H-%M-%S", localtime())
-        linelist = [line.strip() + ' curtime=' + curtime 
+        linelist = [line.strip() + ' curtime=' + curtime + ' batchid=' + str(batchid)
                     for line in linelist]
+        batchid += 1
         f = open(fpath, mode)
         f.write('\n'.join(linelist))
         f.flush()
