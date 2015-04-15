@@ -82,8 +82,9 @@ def table_to_file(table, filepath, freshfile, adddic=None):
     else:
         mode = 'a'
 
+    colnames = get_all_colnames()
+
     with open(filepath, mode) as f:
-        colnames = table[0].keys()
         if adddic != None:
             colnames += adddic.keys()
         colnamestr = ';'.join(colnames) + '\n'
@@ -94,13 +95,19 @@ def table_to_file(table, filepath, freshfile, adddic=None):
                 rowcopy = dict(row.items() + adddic.items())
             else:
                 rowcopy = row
-            rowstr = [rowcopy[k] for k in colnames]
+            rowstr = [ rowcopy[k] if rowcopy.has_key(k) else '' for k in colnames ]
             rowstr = [str(x) for x in rowstr]
-            rowstr = ';'.join(rowstr) + '\n'
+            rowstr = ','.join(rowstr) + '\n'
             f.write(rowstr)
             f.flush()
             os.fsync(f.fileno())
 
+def get_all_colnames(table):
+    names = set()
+    for row in table:
+        names = names.union(row.keys())
+
+    return list(names)
 
 def dump_table_to_list():
     cmd = 'sudo ovs-ofctl dump-flows br0'.split()
