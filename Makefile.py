@@ -12,6 +12,8 @@ import glob
 import flowTableParser
 from time import localtime, strftime
 
+args = None
+
 def shcmd(cmd, ignore_error=False):
     print 'Doing:', cmd
     ret = subprocess.call(cmd, shell=True)
@@ -110,27 +112,30 @@ def dump_table_to_list():
 
 def append_table_to_file(fpath):
     fresh = True
-    for i in range(3):
+    while True:
         linelist = dump_table_to_list()
         tab = flowTableParser.text2table(linelist)
         table_to_file(tab, fpath, fresh)
         fresh = False
 
-        sleeptime = 2
+        sleeptime = 5
         print 'sleeping for ', sleeptime, 'seconds'
         time.sleep(sleeptime)
 
 def main():
     #function you want to call
     #print 'hello'
-    append_table_to_file('./mylog.txt')
+    # append_table_to_file('./mylog.txt')
+    append_table_to_file(args.log)
 
 def _main():
+    global args
     parser = argparse.ArgumentParser(
             description="This file hold command stream." \
             'Example: python Makefile.py doexp1 '
             )
     parser.add_argument('-t', '--target', action='store')
+    parser.add_argument('-l', '--log', action='store')
     args = parser.parse_args()
 
     if args.target == None:
