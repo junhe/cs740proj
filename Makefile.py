@@ -87,7 +87,7 @@ def table_to_file(table, filepath, freshfile, adddic=None):
     with open(filepath, mode) as f:
         if adddic != None:
             colnames += adddic.keys()
-        colnamestr = ';'.join(colnames) + '\n'
+        colnamestr = ','.join(colnames) + '\n'
         if freshfile:
             f.write(colnamestr)
         for row in table:
