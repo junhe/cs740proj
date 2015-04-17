@@ -170,7 +170,8 @@ def debug2():
 
 def parse_raw_files():
     # filelist = ['./benchmark_read_128_files_1KB.txt']
-    filelist = ['./test-benchmark/benchmark_write_128_files_1MB.txt']
+    # filelist = ['./test-benchmark/benchmark_write_128_files_1MB.txt']
+    filelist = glob.glob('./benchmark2/bench*')
     for fpath in filelist:
         parse_single_file(fpath)
 

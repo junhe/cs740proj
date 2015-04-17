@@ -4,7 +4,8 @@ library(plyr)
 library(reshape2)
 
 # copy the following so you can do sme()
-WORKDIRECTORY='/u/j/h/jhe/workdir/cs740proj'
+# WORKDIRECTORY='/u/j/h/jhe/workdir/cs740proj'
+WORKDIRECTORY='/Users/junhe/BoxSync/workdir/cs740proj'
 THISFILE     ='analyzer.r'
 setwd(WORKDIRECTORY)
 sme <- function()
@@ -18,9 +19,10 @@ explore.FSJ386323 <- function()
     transfer <- function()
     {
     }
-    load <- function()
+    load <- function(fpath)
     {
-        d = read.csv('./benchmark_read_128_files_1KB.txt.parsed', header=T)
+        #d = read.csv('./benchmark_read_128_files_1KB.txt.parsed', header=T)
+        d = read.csv(fpath, header=T)
         #d = read.csv('./try.parsed', header=T)
         #print(head(d, 50))
         return(d)
@@ -49,9 +51,17 @@ explore.FSJ386323 <- function()
 
     do_main <- function()
     {
-        d = load()
-        d = clean(d)
-        func(d)
+				files = list.files(path="./benchmark2/", pattern="*parsed")
+				print(files)
+				for (f in files) {
+						d = load(paste('./benchmark2/',f,sep=''))
+						d = clean(d)
+						func(d)
+						r = readline()
+						if (r == 'a') {
+								return()
+						}
+				}
     }
     do_main()
 }
