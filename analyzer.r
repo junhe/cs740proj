@@ -40,28 +40,36 @@ explore.FSJ386323 <- function()
                 "#D14285", "#6DDE88", "#652926", "#7FDCC0", "#C84248", "#8569D5", "#5E738F", "#D1A33D", 
                 "#8A7C64", "#599861")
 
-        d$flow = interaction(d$nw_src, d$nw_dst, sep='->')
-        d = ddply(d, .(flow), function(x) {x$id = seq_along(x$duration); x})
-        #p <- ggplot(d, aes(x=duration, y=n_packets)) +
-        p <- ggplot(d, aes(x=id, y=n_bytes/1024, color=flow)) +
+				# n_packets,idle_age,nw_dst,dl_src,actions,idle_timeout,cookie,tp_src,duration,table,nw_src,n_bytes,priority,tp_dst,dl_dst,in_port
+        
+        tmp = levels(d$nw_src)
+        # d$flow = with(d, paste(nw_dst,dl_src, tp_src, nw_src, tp_dst, dl_dst, in_port, sep=':'))
+        # d$flow = interaction(d$nw_src, d$tp_src, d$nw_dst, d$tp_dst, sep=':')
+        # d$flow = paste(d$nw_src, d$tp_src, d$nw_dst, d$tp_dst, sep=':')
+        d$flow = paste(d$nw_src, d$nw_dst, sep='->')
+
+        p <- ggplot(d, aes(x=batchid, y=n_bytes/1024, color=flow)) +
             geom_point() +
-            scale_color_manual(values=cbPalette) 
+            # geom_line() +
+            # scale_color_manual(values=cbPalette) +
+            xlab('second')
         print(p)
     }
 
     do_main <- function()
     {
-				files = list.files(path="./benchmark2/", pattern="*parsed")
-				print(files)
-				for (f in files) {
-						d = load(paste('./benchmark2/',f,sep=''))
-						d = clean(d)
-						func(d)
-						r = readline()
-						if (r == 'a') {
-								return()
-						}
-				}
+        files = list.files(path="./benchmark2/", pattern="*parsed")
+        print(files)
+        for (f in files) {
+                print(f)
+                d = load(paste('./benchmark2/',f,sep=''))
+                d = clean(d)
+                func(d)
+                r = readline()
+                if (r == 'a') {
+                        return()
+                }
+        }
     }
     do_main()
 }
@@ -71,3 +79,4 @@ main <- function()
     explore.FSJ386323()
 }
 main()
+
