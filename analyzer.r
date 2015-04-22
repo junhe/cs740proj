@@ -35,14 +35,31 @@ explore.FSJ386323 <- function()
 
     func <- function(d)
     {
+        rename_for_human <- function(ip) 
+        {
+            hostname = revalue(ip, c(
+                    "10.10.1.8" = "Client" ,
+                    "10.10.1.9" = "Namenode" ,
+                    "10.10.1.1" = "Datanode1" ,
+                    "10.10.1.2" = "Datanode2" ,
+                    "10.10.1.3" = "Datanode3" ,
+                    "10.10.1.4" = "Datanode4" ,
+                    "10.10.1.15" = "Datanode5" ,
+                    "10.10.1.16" = "Datanode6" ,
+                    "10.10.1.17" = "Datanode7"))
+            return (hostname)
+        }
         cbPalette <- c("#89C5DA", "#DA5724", "#74D944", "#CE50CA", "#3F4921", "#C0717C", "#CBD588", "#5F7FC7", 
                 "#673770", "#D3D93E", "#38333E", "#508578", "#D7C1B1", "#689030", "#AD6F3B", "#CD9BCD", 
                 "#D14285", "#6DDE88", "#652926", "#7FDCC0", "#C84248", "#8569D5", "#5E738F", "#D1A33D", 
                 "#8A7C64", "#599861")
 
-				# n_packets,idle_age,nw_dst,dl_src,actions,idle_timeout,cookie,tp_src,duration,table,nw_src,n_bytes,priority,tp_dst,dl_dst,in_port
-        
+        # n_packets,idle_age,nw_dst,dl_src,actions,idle_timeout,cookie,tp_src,duration,table,nw_src,n_bytes,priority,tp_dst,dl_dst,in_port
         tmp = levels(d$nw_src)
+        levels(d$nw_src) = rename_for_human(tmp) 
+        tmp = levels(d$nw_dst)
+        levels(d$nw_dst) = rename_for_human(tmp) 
+
         # d$flow = with(d, paste(nw_dst,dl_src, tp_src, nw_src, tp_dst, dl_dst, in_port, sep=':'))
         # d$flow = interaction(d$nw_src, d$tp_src, d$nw_dst, d$tp_dst, sep=':')
         # d$flow = paste(d$nw_src, d$tp_src, d$nw_dst, d$tp_dst, sep=':')
@@ -52,17 +69,20 @@ explore.FSJ386323 <- function()
             geom_point() +
             # geom_line() +
             # scale_color_manual(values=cbPalette) +
+            facet_wrap(~flow) +
             xlab('second')
         print(p)
     }
 
     do_main <- function()
     {
-        files = list.files(path="./benchmark2/", pattern="*parsed")
+        # dir = './data/'
+        dir = './benchmark4/'
+        files = list.files(path=dir, pattern="*parsed")
         print(files)
         for (f in files) {
                 print(f)
-                d = load(paste('./benchmark2/',f,sep=''))
+                d = load(paste(dir,f,sep=''))
                 d = clean(d)
                 func(d)
                 r = readline()
