@@ -65,12 +65,23 @@ explore.FSJ386323 <- function()
         # d$flow = paste(d$nw_src, d$tp_src, d$nw_dst, d$tp_dst, sep=':')
         d$flow = paste(d$nw_src, d$nw_dst, sep='->')
 
-        p <- ggplot(d, aes(x=batchid, y=n_bytes/1024, color=flow)) +
+        # d = subset(d, flow == 'Datanode7->Client')
+        # d$flow = paste(d$nw_src, d$tp_src, d$nw_dst, d$tp_dst, sep=':')
+
+        d = aggregate(n_bytes~batchid+flow, data=d, sum)
+
+        d$pre_bytes = c(d$n_bytes[1], d$n_bytes[-length(d$n_bytes)])
+        d$bw = d$n_bytes - d$pre_bytes
+        d$bw = ifelse(d$bw > 0, d$bw, 0)
+
+        # p <- ggplot(d, aes(x=batchid, y=n_bytes/1024)) +
+        p <- ggplot(d, aes(x=batchid, y=bw/1024)) +
             geom_point() +
             # geom_line() +
             # scale_color_manual(values=cbPalette) +
             facet_wrap(~flow) +
-            xlab('second')
+            xlab('second') +
+            theme_bw()
         print(p)
     }
 
@@ -79,6 +90,7 @@ explore.FSJ386323 <- function()
         # dir = './data/'
         dir = './benchmark4/'
         files = list.files(path=dir, pattern="*parsed")
+        # files = list.files(path=dir, pattern="replicate_read_256_files_10MB.txt.parsed")
         print(files)
         for (f in files) {
                 print(f)
